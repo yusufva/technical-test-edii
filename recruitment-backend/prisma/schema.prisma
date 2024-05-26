@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id String @id @default(uuid())
+  email String @unique
+  password String @db.Text
+  role_id Int @default(2)
+  role role @relation(references: [id], fields: [role_id], onDelete: Cascade)
+  biodata biodata?
+}
+
+model role {
+  id Int @id
+  name String
+  user user[]
+}
+
+model biodata{
+  id String @id @default(uuid())
+  nama String
+  posisi String
+  nik String @db.VarChar(17)
+  ttl String
+  kelamin String
+  agama String
+  golongan_darah String @db.VarChar(2)
+  status String
+  alamat_ktp String
+  alamat_domisili String
+  telpon String @db.VarChar(15)
+  kerabat String
+  pendidikan riwayat_pendidikan[]
+  pelatihan riwayat_pelatihan[]
+  pekerjaan riwayat_pekerjaan[]
+  skill String
+  kesiapan Boolean
+  expektasi_gaji Int
+  user user @relation(fields: [id], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  deleted_at DateTime?
+}
+
+model riwayat_pelatihan {
+  id Int @id @default(autoincrement())
+  kursus String
+  sertifikat Boolean
+  tahun String
+  biodata_id String
+  biodata biodata @relation(fields: [biodata_id], references: [id], onDelete: Cascade)
+}
+
+model riwayat_pendidikan {
+  id Int @id @default(autoincrement())
+  jenjang String
+  institusi String
+  jurusan String
+  lulus String
+  ipk Decimal
+  biodata_id String
+  biodata biodata @relation(fields: [biodata_id], references: [id], onDelete: Cascade)
+}
+
+model riwayat_pekerjaan {
+  id Int @id @default(autoincrement())
+  perusahaan String
+  posisi String
+  pendapatan Int
+  tahun String
+  biodata_id String
+  biodata biodata @relation(fields: [biodata_id], references: [id], onDelete: Cascade)
+}
