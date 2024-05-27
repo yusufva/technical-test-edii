@@ -57,7 +57,7 @@ const EditBiodata = () => {
         });
         const data = {
             nama: event.target.name.value,
-            posisi: event.target.posisi.value,
+            posisi: event.target.posisiLamaran.value,
             nik: event.target.nik.value,
             ttl: `${event.target.tempatLahir.value}, ${event.target.tglLahir.value}`,
             kelamin: event.target.gender.value,
@@ -151,6 +151,10 @@ const EditBiodata = () => {
     const onChangeValuePekerjaan = (event, index) => {
         const { name, value } = event.target;
         const newPekerjaan = [...pekerjaan];
+        if (name === "posisiLama") {
+            newPekerjaan[index]["posisi"] = value;
+            return newPekerjaan;
+        }
         newPekerjaan[index][name] = value;
         setPekerjaan(newPekerjaan);
     };
@@ -216,7 +220,11 @@ const EditBiodata = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="w-full h-full py-10 px-14 grid grid-cols-2 gap-10">
                         <InputForm type="text" name="name" label="Name" />
-                        <InputForm type="text" name="posisi" label="Posisi" />
+                        <InputForm
+                            type="text"
+                            name="posisiLamaran"
+                            label="Posisi"
+                        />
                         <InputForm type="text" name="nik" label="No. KTP" />
                         <InputForm
                             type="text"
@@ -532,7 +540,7 @@ const EditBiodata = () => {
                                     />
                                     <InputForm
                                         type="text"
-                                        name={`posisilama`}
+                                        name={`posisi`}
                                         label="Posisi Lama"
                                         placeholder="posisi"
                                         onChange={(e) => {
@@ -570,9 +578,9 @@ const EditBiodata = () => {
                             </p>
                             <InputForm
                                 type="radio"
-                                name="sertifikat"
+                                name="kesiapan"
                                 value={1}
-                                label="Ada"
+                                label="ya"
                                 onChange={(e) => {
                                     onChangeValueKesiapan(e);
                                 }}
@@ -580,9 +588,9 @@ const EditBiodata = () => {
                             />
                             <InputForm
                                 type="radio"
-                                name="sertifikat"
+                                name="kesiapan"
                                 value={0}
-                                label="Tidak Ada"
+                                label="Tidak"
                                 onChange={(e) => {
                                     onChangeValueKesiapan(e);
                                 }}
